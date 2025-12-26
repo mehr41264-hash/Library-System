@@ -13,7 +13,6 @@ for i in range (100, 1000):
 ids = random.choice(library_id)
 library_id.remove(ids)
 
-
 #Making login and signup for the user to increase security 
 class Userinfo_signup():
     def __init__(self, username, password, location_info,):
@@ -32,15 +31,23 @@ user = input("Signup/Login:").lower()
 
 #Signup
 database_user = []
+record = None
+with open("/home/mehr-ali/Documents/Projects Python/usersinfo.txt", "r") as file:
+    for line in file:
+        line = line.strip()
+        if line:
+            database_user.append(line.split(","))
 def Signup():
     while True:
         username = input("Enter your username: ").lower()
         if username == "":
             print("Username must not be empty")
             continue
-        if username in database_user:
-            print("Username already exists")
-            continue
+        for record in database_user:
+            if record[0] == username:
+                print("Username already exists, Try making a new one")
+                continue
+                break
         while True:
             password = input("Create your password: ")
             if len(password) < 8:
@@ -57,7 +64,7 @@ def Signup():
         signup_info = Userinfo_signup(username, password, location_info)
         database_user.append(signup_info)
         print("Signup Succesfull")
-        print(f"Your new Library ID is {ids}, use it for your login")
+        print(f"Your new Library ID is {int(ids)}, use it for your login")
         print("Thank You")
         with open("/home/mehr-ali/Documents/Projects Python/usersinfo.txt", "a") as file:
             file.write(f"{signup_info.username},{signup_info.password},{signup_info.location_info},{ids} \n")
@@ -65,5 +72,39 @@ def Signup():
 if user == "signup":
     Signup()
 
+#Login 
+database_user = []
+with open("/home/mehr-ali/Documents/Projects Python/usersinfo.txt", "r") as file:
+    for line in file:
+        line = line.strip()
+        if line:
+            database_user.append(line.split(","))
+def Login():
+    while True:
+        username_login = input("Enter your username: ").lower()
+        if username_login == "":
+            print("Username can't be empty")
+            continue
+        user_record = None
+        for record in database_user:
+            if record[0] == username_login:
+                user_record = record
+                break
+        password_login = input("Enter your password: ")
+        if user_record[1] != password_login:
+            print("Wrong Password Entered")
+            continue
+        library_id_login = int(input("Enter your Library id: "))
+        if int(user_record[3]) != library_id_login:
+            print("Wrong Library ID")
+            continue
+        if library_id_login == "":
+            print("Library ID must not be empty")
+            continue
+        break
 
+    login_info = Userinfo_login(username_login, password_login, library_id_login)
+    print("Login Successful!!")
 
+if user == "login":
+    Login()
