@@ -1,7 +1,22 @@
 import random
 #Library Management System
 print("Welcome to the library")
+#Root user who can only add books
+def root_user():
+    while True:
+        admin = input("Enter your username: ")
+        if admin != "admin":
+            print("Wrong credentials")
+            continue
+        break
+    while True:
+        password = input("Enter your password: ")
+        if password != "mehr@li123":
+            print("Wrong Password")
+            continue
 
+        print("Login Successful")
+        break
 #Making special symbols list for validating special symbols of password
 specialchar_list = ["@", "^", "*", "%", "<", ",", "~" ]
 #Making numbers list for validating numbers of password
@@ -12,6 +27,18 @@ for i in range (100, 1000):
     library_id.append(i)
 ids = random.choice(library_id)
 library_id.remove(ids)
+
+#Addind books to the library class
+available_books = []
+class AddBooks():
+    def add_book(self, book, author):
+        self.book = book
+        self.author = author
+        available_books.append((self.book, self.author))
+        print(f"The new book which  was added is {self.book} written by {self.author}")
+        
+        with open("/home/mehr-ali/Documents/Projects Python/availablebooks.txt", "a") as file:
+            file.write(f"{self.book},{self.author} \n")
 
 #Making login and signup for the user to increase security 
 class Userinfo_signup():
@@ -27,7 +54,7 @@ class Userinfo_login():
         self.library_id_login = library_id_login
 
 #Selecting for signup or login by the user
-user = input("Signup/Login:").lower()
+user = input("Signup /Login / AddBooks: ").lower().strip()
 
 #Signup
 database_user = []
@@ -108,3 +135,15 @@ def Login():
 
 if user == "login":
     Login()
+#Function for the inputs
+def adding_boooks():
+    book = input("Enter the name of the book: ")
+    author = input("Enter the name of the author: ")
+    added_books = AddBooks()
+    added_books.book = book
+    added_books.author = author
+    added_books.add_book(book, author)
+#AddBooks
+if user == ("addbooks"):
+    root_user()
+    adding_boooks()
